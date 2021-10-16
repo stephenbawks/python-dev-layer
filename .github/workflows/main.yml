@@ -36,7 +36,7 @@ jobs:
       - name: Create Zip of Dependencies
         run: |
           cd aws_lambda_layer
-          zip -r9 ./lambda_layer.zip .
+          zip -r9 ./../lambda_layer.zip .
 
       - uses: actions/upload-artifact@v2
         with:
