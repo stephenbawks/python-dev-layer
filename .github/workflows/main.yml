@@ -1,0 +1,27 @@
+name: Bawks - Doing Stuff Organization
+
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Staging
+        run: |
+          mkdir aws_lambda_layer
+          cd aws_lambda_layer
+
+      - name: Python Virtual Environment
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+
+      - name: Install Requirements
+        run: pip3 install -r requirements.txt
