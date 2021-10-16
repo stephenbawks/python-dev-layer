@@ -47,8 +47,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       - run: |
-            aws s3 cp ./layer.zip s3://bawks-awesome-python-layer
+            aws s3 cp ./lambda_layer.zip s3://bawks-awesome-python-layer
             aws lambda publish-layer-version --layer-name my-layer --description "My layer"  \ 
-            --content S3Bucket=bawks-awesome-python-layer,S3Key=layer.zip \
+            --content S3Bucket=bawks-awesome-python-layer,S3Key=lambda_layer.zip \
             --compatible-runtimes python3.6 python3.7 python3.8 \
             --compatible-architectures "arm64" "x86_64" 
