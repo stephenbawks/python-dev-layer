@@ -14,7 +14,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: NONPROD
+    environment: 
+      name: NONPROD
+      url: https://github.com
     steps:
       - uses: actions/checkout@v2
 
@@ -44,7 +46,9 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      - run: aws lambda publish-layer-version --layer-name my-layer --description "My layer"  \ 
+      - run: |
+            aws s3 cp ./layer.zip s3://bawks-awesome-python-layer
+            aws lambda publish-layer-version --layer-name my-layer --description "My layer"  \ 
             --content S3Bucket=bawks-awesome-python-layer,S3Key=layer.zip \
             --compatible-runtimes python3.6 python3.7 python3.8 \
             --compatible-architectures "arm64" "x86_64" 
