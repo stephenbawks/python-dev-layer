@@ -14,7 +14,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    environment: NONPROD
     steps:
       - uses: actions/checkout@v2
 
@@ -40,8 +40,6 @@ jobs:
           path: ./lambda_layer.zip
 
       - uses: aws-actions/configure-aws-credentials@v1
-        environment:
-          name: nonprod
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
