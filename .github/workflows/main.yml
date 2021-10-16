@@ -45,6 +45,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       - run: aws lambda publish-layer-version --layer-name my-layer --description "My layer"  \ 
-            --license-info "MIT" --content S3Bucket=bawks-awesome-python-layer,S3Key=layer.zip \
-            --compatible-runtimes python3.6 python3.7 python3.8
+            --content S3Bucket=bawks-awesome-python-layer,S3Key=layer.zip \
+            --compatible-runtimes python3.6 python3.7 python3.8 \
             --compatible-architectures "arm64" "x86_64" 
