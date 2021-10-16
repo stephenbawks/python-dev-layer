@@ -34,4 +34,4 @@ jobs:
           pip3 install -r requirements.txt --target ./aws_lambda_layer
 
       - name: Create Zip of Dependencies
-        run: zip -r9 lambda_layer.zip .
+        run: zip -r9 lambda_layer.zip ./aws_lambda_layer
