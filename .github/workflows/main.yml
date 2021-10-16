@@ -29,7 +29,7 @@ jobs:
           source .venv/bin/activate
 
       - name: Install Requirements
-        run: pip3 install -r requirements.txt
+        run: pip3 install -r requirements.txt --target /aws_lambda_layer
 
       - name: Create Zip of Dependencies
         run: zip -r9 lambda_layer.zip .
