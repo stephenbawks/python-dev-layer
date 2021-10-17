@@ -52,10 +52,10 @@ jobs:
           --description "Python Development Layer" \
           --content S3Bucket=bawks-awesome-python-layer,S3Key=lambda_layer.zip \
           --compatible-runtimes "python3.8" "python3.9")
-          echo $response
-          layer_version=$($response | jq -r '.Version')
 
+          layer_version=$(echo $response | jq -r '.Version')
           echo "Layer Version: $layer_version"
+
           aws lambda add-layer-version-permission --layer-name awesome-python-layer \
           --version-number $layer_version --action lambda:GetLayerVersion \
           --statement-id GrantAccountAccess --principal "*"
