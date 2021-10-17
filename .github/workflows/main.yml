@@ -1,5 +1,8 @@
 name: Bawks - Doing Stuff Organization
 
+# Installed Software
+# https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md
+
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
@@ -21,7 +24,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Staging
-        run: mkdir aws_lambda_layer
+        run: mkdir -p aws_lambda_layer/python
 
       # - name: Python Virtual Environment
       #   run: |
@@ -29,7 +32,7 @@ jobs:
       #     source .venv/bin/activate
 
       - name: Install Requirements
-        run: pip3 install -r requirements.txt --target ./aws_lambda_layer
+        run: pip3 install -r requirements.txt --target ./aws_lambda_layer/python
 
       - name: Create Zip of Dependencies
         run: |
