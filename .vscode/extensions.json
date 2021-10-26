@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "oderwat.indent-rainbow",
+        "ms-python.python",
+        "byi8220.indented-block-highlighting",
+        "DavidAnson.vscode-markdownlint",
+        "esbenp.prettier-vscode"
+    ]
+}
