@@ -39,7 +39,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: python-requirements
-          path: ./src/layer/lambda_layer.zip
+          path: ./lambda_layer.zip
 
   deploynonprod:
     name: Deploy to NonProd
