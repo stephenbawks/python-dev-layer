@@ -55,6 +55,9 @@ jobs:
       layer_version: ${{ steps.build-layer.outputs.layer_version }}
       layer_arn: ${{ steps.build-layer.outputs.layer_arn }}
       layer_name: ${{ steps.build-layer.outputs.layer_name }}
+    strategy:
+      matrix:
+        region: [us-east-2, us-east-1]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
@@ -77,7 +80,8 @@ jobs:
           response=$(aws lambda publish-layer-version --layer-name ${layer_name} \
           --description "Python Development Layer" \
           --content S3Bucket=${{ secrets.BUCKET_NAME }},S3Key=${folder_path}/lambda_layer.zip \
-          --compatible-runtimes "python3.8" "python3.9")
+          --compatible-runtimes "python3.8" "python3.9") \
+          --region ${{ matrix.region }}
 
           layer_version=$(echo $response | jq -r '.Version')
           echo "::set-output name=layer_version::$(echo $response | jq -r '.Version')"
@@ -100,6 +104,9 @@ jobs:
       layer_version: ${{ steps.build-layer.outputs.layer_version }}
       layer_arn: ${{ steps.build-layer.outputs.layer_arn }}
       layer_name: ${{ steps.build-layer.outputs.layer_name }}
+    strategy:
+      matrix:
+        region: [us-east-2, us-east-1]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
@@ -122,7 +129,8 @@ jobs:
           response=$(aws lambda publish-layer-version --layer-name ${layer_name} \
           --description "Python Development Layer" \
           --content S3Bucket=${{ secrets.BUCKET_NAME }},S3Key=${folder_path}/lambda_layer.zip \
-          --compatible-runtimes "python3.8" "python3.9")
+          --compatible-runtimes "python3.8" "python3.9") \
+          --region ${{ matrix.region }}
 
           layer_version=$(echo $response | jq -r '.Version')
           echo "::set-output name=layer_version::$(echo $response | jq -r '.Version')"
@@ -133,4 +141,5 @@ jobs:
         run: |
           aws lambda add-layer-version-permission --layer-name ${{ steps.build-layer.outputs.layer_name }} \
           --version-number ${{ steps.build-layer.outputs.layer_version }} --action lambda:GetLayerVersion \
-          --statement-id GrantAccountAccess --principal "*"
+          --statement-id GrantAccountAccess --principal "*" \
+          --region ${{ matrix.region }}
