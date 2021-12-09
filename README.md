@@ -12,6 +12,6 @@ Created this layer to bundle up a few different tools that I tend to use over an
 
 ## Layer ARN
 
-| Region | ARN |
-|-------------|----------------|
+| Region               | ARN            |
+|----------------------|----------------|
 | Ohio (us-east-2)     | arn:aws:lambda:us-east-2:547201116507:layer:python-lambda-layer-09_12_2021:2   |
