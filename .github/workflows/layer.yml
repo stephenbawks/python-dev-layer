@@ -31,11 +31,9 @@ jobs:
           python-version: 3.9
 
       - name: Install Requirements
-        working-directory: ./src/layer
         run: mkdir -p python/lib/python3.9/site-packages && pip install -r requirements.txt -t ./python/lib/python3.9/site-packages
 
       - name: Create Zip of Dependencies
-        working-directory: ./src/layer
         run: zip -r lambda_layer.zip ./python
 
       - uses: actions/upload-artifact@v2
