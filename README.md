@@ -3,7 +3,7 @@
 Created this layer to bundle up a few different tools that I tend to use over and over again.
 
 [![Bawks Awesome Python Development Layer](https://github.com/stephenbawks/python-dev-layer/actions/workflows/layer.yml/badge.svg)](https://github.com/stephenbawks/python-dev-layer/actions/workflows/layer.yml)
-![Deploy Rock FOC API](https://img.shields.io/badge/Python%20Layer%20Verson-2-orange)
+![Deploy Rock FOC API](https://img.shields.io/badge/Python%20Layer%20Verson-3-orange)
 
 
 ## Current Modules Included
@@ -15,4 +15,4 @@ Created this layer to bundle up a few different tools that I tend to use over an
 
 | Region               | ARN            |
 |----------------------|----------------|
-| Ohio (us-east-2)     | arn:aws:lambda:us-east-2:547201116507:layer:python-lambda-layer-09_12_2021:2   |
+| Ohio (us-east-2)     | arn:aws:lambda:us-east-2:547201116507:layer:python-lambda-layer-09_12_2021:3   |
