@@ -67,7 +67,7 @@ jobs:
         run: |
           date=$(date +"%d_%m_%Y")
           folder_path="nonprod/${date}"
-          layer_name="python_lambda_layer_${date}"
+          layer_name="nonprod-python-lambda-layer-${date}"
           aws s3 cp ./lambda_layer.zip s3://${{ secrets.BUCKET_NAME }}/${folder_path}/lambda_layer.zip
           response=$(aws lambda publish-layer-version --layer-name ${layer_name} \
           --description "Python Development Layer" \
@@ -111,7 +111,7 @@ jobs:
         run: |
           date=$(date +"%d_%m_%Y")
           folder_path="prod/${date}"
-          layer_name="python_lambda_layer_${date}"
+          layer_name="python-lambda-layer-${date}"
           aws s3 cp ./lambda_layer.zip s3://${{ secrets.BUCKET_NAME }}/${folder_path}/lambda_layer.zip
           response=$(aws lambda publish-layer-version --layer-name ${layer_name} \
           --description "Python Development Layer" \
