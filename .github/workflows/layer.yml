@@ -50,6 +50,7 @@ jobs:
     outputs:
       layer_version: ${{ steps.build-layer.outputs.layer_version }}
       layer_arn: ${{ steps.build-layer.outputs.layer_arn }}
+      layer_name: ${{ steps.build-layer.outputs.layer_name }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
@@ -77,7 +78,7 @@ jobs:
           layer_version=$(echo $response | jq -r '.Version')
           echo "::set-output name=layer_version::$(echo $response | jq -r '.Version')"
           echo "::set-output name=layer_arn::$(echo $response | jq -r '.LayerArn')"
-          echo "Layer Version: $layer_version"
+          echo "::set-output name=layer_name::${layer_name}"
 
       # - name: Lambda Layer Permission
       #   run: |
@@ -94,6 +95,7 @@ jobs:
     outputs:
       layer_version: ${{ steps.build-layer.outputs.layer_version }}
       layer_arn: ${{ steps.build-layer.outputs.layer_arn }}
+      layer_name: ${{ steps.build-layer.outputs.layer_name }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
@@ -121,10 +123,10 @@ jobs:
           layer_version=$(echo $response | jq -r '.Version')
           echo "::set-output name=layer_version::$(echo $response | jq -r '.Version')"
           echo "::set-output name=layer_arn::$(echo $response | jq -r '.LayerArn')"
-          echo "Layer Version: $layer_version"
+          echo "::set-output name=layer_name::${layer_name}"
 
       - name: Lambda Layer Permission
         run: |
-          aws lambda add-layer-version-permission --layer-name $layer_name \
+          aws lambda add-layer-version-permission --layer-name ${{ steps.build-layer.outputs.layer_name }} \
           --version-number ${{ steps.build-layer.outputs.layer_version }} --action lambda:GetLayerVersion \
           --statement-id GrantAccountAccess --principal "*"
