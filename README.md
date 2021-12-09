@@ -9,6 +9,7 @@ Created this layer to bundle up a few different tools that I tend to use over an
 ## Current Modules Included
 * loguru
 * pendulum
+* nanoid
 
 ## Layer ARN
 
