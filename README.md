@@ -2,7 +2,7 @@
 
 Created this layer to bundle up a few different tools that I tend to use over and over again.
 
-[![Awesome Python Development Layer](https://github.com/rcdprojects/rockfocnetworkapi/actions/workflows/layer.yml/badge.svg)](https://github.com/stephenbawks/python-dev-layer/actions/workflows/layer.yml)
+[![Bawks Awesome Python Development Layer](https://github.com/stephenbawks/python-dev-layer/actions/workflows/layer.yml/badge.svg)](https://github.com/stephenbawks/python-dev-layer/actions/workflows/layer.yml)
 ![Deploy Rock FOC API](https://img.shields.io/badge/Python%20Layer%20Verson-2-orange)
 
 
