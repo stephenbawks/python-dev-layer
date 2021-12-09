@@ -1,0 +1,132 @@
+name: Lambda Layer - Python Requirements
+
+# Installed Software
+# https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md
+
+# Python Layer Paths
+# https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html#configuration-layers-path
+
+# Controls when the workflow will run
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Lambda Layer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Python ${{ matrix.node-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install Requirements
+        working-directory: ./src/layer
+        run: mkdir -p python/lib/python3.9/site-packages && pip install -r requirements.txt -t ./python/lib/python3.9/site-packages
+
+      - name: Create Zip of Dependencies
+        working-directory: ./src/layer
+        run: zip -r lambda_layer.zip ./python
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: python-requirements
+          path: ./src/layer/lambda_layer.zip
+
+  deploynonprod:
+    name: Deploy to NonProd
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: NonProd
+    outputs:
+      layer_version: ${{ steps.build-layer.outputs.layer_version }}
+      layer_arn: ${{ steps.build-layer.outputs.layer_arn }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: python-requirements
+
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload Zip and Create Layer
+        id: build-layer
+        run: |
+          date=$(date +"%d_%m_%Y")
+          folder_path="nonprod/${date}"
+          layer_name="python_lambda_layer_${date}"
+          aws s3 cp ./lambda_layer.zip s3://${{ secrets.BUCKET_NAME }}/${folder_path}/lambda_layer.zip
+          response=$(aws lambda publish-layer-version --layer-name ${layer_name} \
+          --description "Python Development Layer" \
+          --content S3Bucket=${{ secrets.BUCKET_NAME }},S3Key=${folder_path}/lambda_layer.zip \
+          --compatible-runtimes "python3.8" "python3.9")
+
+          layer_version=$(echo $response | jq -r '.Version')
+          echo "::set-output name=layer_version::$(echo $response | jq -r '.Version')"
+          echo "::set-output name=layer_arn::$(echo $response | jq -r '.LayerArn')"
+          echo "Layer Version: $layer_version"
+
+      # - name: Lambda Layer Permission
+      #   run: |
+      #     aws lambda add-layer-version-permission --layer-name ${layer_name} \
+      #     --version-number ${{ steps.build-layer.outputs.layer_version }} --action lambda:GetLayerVersion \
+      #     --statement-id GrantAccountAccess --principal "*"
+
+  deployprod:
+    name: Deploy to Prod
+    runs-on: ubuntu-latest
+    needs: [build, deploynonprod]
+    environment:
+      name: Prod
+    outputs:
+      layer_version: ${{ steps.build-layer.outputs.layer_version }}
+      layer_arn: ${{ steps.build-layer.outputs.layer_arn }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: python-requirements
+
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload Zip and Create Layer
+        id: build-layer
+        run: |
+          date=$(date +"%d_%m_%Y")
+          folder_path="prod/${date}"
+          layer_name="python_lambda_layer_${date}"
+          aws s3 cp ./lambda_layer.zip s3://${{ secrets.BUCKET_NAME }}/${folder_path}/lambda_layer.zip
+          response=$(aws lambda publish-layer-version --layer-name ${layer_name} \
+          --description "Python Development Layer" \
+          --content S3Bucket=${{ secrets.BUCKET_NAME }},S3Key=${folder_path}/lambda_layer.zip \
+          --compatible-runtimes "python3.8" "python3.9")
+
+          layer_version=$(echo $response | jq -r '.Version')
+          echo "::set-output name=layer_version::$(echo $response | jq -r '.Version')"
+          echo "::set-output name=layer_arn::$(echo $response | jq -r '.LayerArn')"
+          echo "Layer Version: $layer_version"
+
+      - name: Lambda Layer Permission
+        run: |
+          aws lambda add-layer-version-permission --layer-name $layer_name \
+          --version-number ${{ steps.build-layer.outputs.layer_version }} --action lambda:GetLayerVersion \
+          --statement-id GrantAccountAccess --principal "*"

@@ -15,7 +15,7 @@
     "[javascript]": {
         "editor.formatOnSave": true,
         "editor.formatOnPaste": true,
-        "editor.tabSize": 4
+        "editor.tabSize": 2
     },
     "[json]": {
         "editor.formatOnSave": true,
@@ -28,6 +28,16 @@
         "editor.formatOnPaste": true,
         "editor.tabSize": 4,
     },
+    "python.linting.pylintArgs": [
+        "--max-line-length=200",
+        "--disable={C0301}"
+    ],
+    "python.formatting.autopep8Args": [
+        "--max-line-length=200"
+    ],
+    "python.linting.pycodestyleArgs": [
+        "--max-line-length=200"
+    ],
     "[markdown]": {
         "editor.wordWrap": "on",
         "editor.quickSuggestions": false,
@@ -56,5 +66,35 @@
     "editor.formatOnSave": true,
     "editor.insertSpaces": true,
     "editor.detectIndentation": false,
-    "yaml.format.singleQuote": true
+    "yaml.format.singleQuote": true,
+    "yaml.customTags": [
+        "!And",
+        "!And sequence",
+        "!If",
+        "!If sequence",
+        "!Not",
+        "!Not sequence",
+        "!Equals",
+        "!Equals sequence",
+        "!Or",
+        "!Or sequence",
+        "!FindInMap",
+        "!FindInMap sequence",
+        "!Base64",
+        "!Join",
+        "!Join sequence",
+        "!Cidr",
+        "!Ref",
+        "!Sub",
+        "!Sub sequence",
+        "!GetAtt",
+        "!GetAZs",
+        "!ImportValue",
+        "!ImportValue sequence",
+        "!Select",
+        "!Select sequence",
+        "!Split",
+        "!Split sequence"
+    ],
+    "python.linting.banditEnabled": false
 }
